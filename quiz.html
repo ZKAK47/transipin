@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Passons au quizz des trains d'Île-de-France</title>
+  <link rel="shortcut icon" type="image/x-icon" href="assets/Transilien RATP.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="indicesIDF.js"></script>
+  <style>
+    :root {
+      --inbut-bas-color: black;
+      --inbut-hov-color: #4FC3F7;
+      --inbut-checked-color: #4FC3F7;
+      --inbut-check-color: white;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    label {
+      display: flex;
+      align-items: center;
+      margin: 0.6em 0;
+      cursor: auto;
+      transition: color 250ms cubic-bezier(.4, .0, .23, 1);
+    }
+
+label input[type="text"], label input[type="number"] {
+  width: 100%;
+  text-align: center;
+}
+
+label input[type="radio"] {
+  opacity: 0;
+}
+
+label input[type="radio"] + .box {
+  width: 1em;
+  height: 1em;
+  background: transparent;
+  border: 2px solid var(--inbut-bas-color);
+  margin: 3px 3px 0px 5px;;
+  border-radius: 50%;
+  transition: border 0.1s;
+}
+
+label:hover input[type="radio"] + .box {
+  border: 2px solid var(--inbut-hov-color);
+}
+
+label input[type="radio"]:checked + .box {
+  border: 5px solid var(--inbut-checked-color);
+}
+
+label input[type="checkbox"] {
+  display: none;
+}
+
+label input[type="checkbox"] + .box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1em;
+  box-sizing: border-box;
+  height: 1em;
+  background: transparent;
+  border: 2px solid var(--inbut-bas-color);
+  margin: 3px 3px 3px 4px;;
+  border-radius: 2px;
+  transition: all 250ms cubic-bezier(.4, .0, .23, 1);
+  position: relative;
+}
+
+label:hover input[type="checkbox"] + .box {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+label input[type="checkbox"]:checked + .box {
+  border: 0.5em solid var(--inbut-checked-color);
+  animation: shrink-bounce 200ms cubic-bezier(.4, .0, .23, 1);
+}
+
+label:hover input[type="checkbox"]:not(:checked) + .box {
+  border: 2px solid var(--inbut-hov-color);
+}
+
+label input[type="checkbox"]:checked + .box::before {
+  content: "";
+  position: absolute;
+  opacity: 0;
+  top: 50%;
+  left: 50%;
+  width: 0.2em;
+  height: 0.5em;
+  border-right: .2em solid var(--inbut-check-color);
+  border-bottom: .2em solid var(--inbut-check-color);
+  transform: translate3d(-90%,-95%,0) rotate(45deg);
+  transform-origin: 0% 100%;
+  animation: checkbox-check 125ms 250ms cubic-bezier(.4,.0,.23,1) forwards;
+}
+
+#quizverlay {
+  transition: opacity 1s;
+}
+
+#quiz-container {
+  transition: opacity 1s, transform 1s;
+}
+
+@keyframes shrink-bounce {
+  0% { transform: scale(1); }
+  33% { transform: scale(0.85); }
+  100% { transform: scale(1); }
+}
+@keyframes checkbox-check {
+  0% { 
+    opacity: 1;
+    width: 0;
+    height: 0;
+    border-color: var(--inbut-check-color);;
+    transform: translate3d(-90%,-95%,0) rotate(45deg);
+  }
+  33% {
+    opacity: 1;
+    width: 0.2em;
+    height: 0;
+    transform: translate3d(-90%,-95%,0) rotate(45deg);
+  }
+  100% {
+    opacity: 1;
+    width: 0.2em;
+    height: 0.5em;
+    top: 50%;
+    left: 50%;
+    border-color: var(--inbut-check-color);;
+    transform: translate3d(-90%,-95%,0) rotate(45deg);
+  }
+}
+    .champs {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 0 1%;
+    }
+    label {
+      display: inline-flex;
+      justify-content: center;
+      flex-direction: column-reverse;
+      align-items: center;
+    }
+         /* Initial styles for the BSOD */
+        #bsod {
+            position: fixed;   /* Positionné en fixed pour qu'il couvre tout l'écran */
+            top: 0;
+            left: 0;
+            width: 100vw;      /* Largeur de l'écran */
+            height: 100vh;     /* Hauteur de l'écran */
+            background: url('assets/images/BSL.png') no-repeat center center; /* Image de fond */
+            background-color: blue;
+            background-size: cover; /* Adapter l'image aux dimensions de l'élément */
+            z-index: 1002;      /* Placer au-dessus de tout */
+            cursor: none;  /* Curseur de chargement */
+        }
+    .secret-popup {
+        background: url(eastersecmenu.svg) no-repeat center center;
+        background-size: contain;
+        background-color: white;
+        border: 10px solid cyan;
+        border-radius: 50%;
+        height: 500px;
+        width: 910px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #023d85;
+        transition: all 0.5s;
+    }
+
+    #custom-cursor {
+      position: absolute;
+      font-size: 30px; /* Ajuste la taille de l'emoji */
+      pointer-events: none;  /* Empêche d'interagir avec le curseur */
+      z-index: 99999999999999999999999999999999999999999999999999999999999999999999999990;
+      transform: translate(-50%, -50%);  /* Centre le curseur */
+    }
+
+    #rickContainer {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background-color: rgba(0, 0, 0, 0.9);
+      top: 0;
+      left: 0;
+      margin-top: 0;
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      z-index: 100000;
+    }
+
+    .secret-popup .pad {
+        display: block;
+        padding: 10%;
+        height: 100%;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10%;
+        font-size: 2em;
+        font-family: sans-serif;
+        text-align: center;
+    }
+
+    .paddy {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+    }
+
+    .Starbut, input[type="number"], input[type="text"] {
+        border: 6px solid #015fd8;
+        border-radius: 10px;
+        background: #0d8ccf;
+        box-shadow: -5px 10px 0px rgba(0, 0, 0, 1);
+        outline: none;
+        padding: 0.81%;;
+        min-height: 102px;
+        color: white;
+        transition: all 1s;
+        display: flex;
+        font-size: clamp(1rem, 5vh, 2.5rem);;
+        justify-content: center;
+        align-items: center;
+        width: 40%;
+    }
+
+    .Starbut:disabled {
+      background-color: #f0f0f0;
+      border-color: #999;
+      color: #999;
+      cursor: not-allowed;
+    }
+
+    .Starbut:disabled:hover {
+      background-color: #f0f0f0;
+      border-color: #999;
+      color: #999;
+      cursor: not-allowed;
+    }
+
+    .Starbutbut:hover  {
+        border-color: #ea97c7;
+        background-color: #ffea00;
+        transform: scale(1.50s); /* gonfler à 105% */
+        color: #023d85;
+    }
+
+    .Starint, input[type="number"], input[type="text"] {
+        transform: scale(1.50s); /* gonfler à 105% */
+        font-size: 2em;
+        font-weight: 800;
+        height: 100%;
+    }
+
+    .Starint:focus, input[type="number"]:focus, input[type="text"]:focus {
+        border-color: #ea97c7;
+        background-color: #ffea00;
+        transform: scale(1.50s); /* gonfler à 105% */
+        color: #023d85;
+        transition: background-color 0s;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        flex-direction: row;
+        width: 100%;
+        height: 18%;
+    }
+
+    .noshow {
+        height: 0%;
+        width: 0%;
+        font-size: 0em;
+        transition: 0.5s;
+    }
+    .kahoot-hyper {
+      padding: 5%;
+      background-color: #46178f;
+      transition: all 0.5s;
+    }
+    .kahoot-hyper:hover {
+      background-color: #0d8ccf;
+      transition: all 0s
+    }
+    .kahoot-hyper:active {
+      background-color: #000000;
+      transition: all 0s
+    }
+
+    a #path22 {
+      fill:#FFF;
+      transition: all 0.5s;
+    }
+    a:hover #path22 {
+      fill:#46178f;
+      transition: all 0s
+    }
+    a:active #path22 {
+      fill: #FFF;
+      transition: all 0s
+    }
+    .clickable:hover {
+      cursor: pointer;
+    }
+    .tremble {
+      animation: tremble 0.1s linear infinite;
+    }
+    .trembleMore {
+      animation: trembleMore 0.01s linear infinite;
+    }
+    @keyframes tremble {
+      0% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      100% { transform: translateX(-5px); }
+    }
+
+    @keyframes trembleMore {
+      0% { transform: translateX(-20px); }
+      50% { transform: translateX(0px); }
+      100% { transform: translateX(-20px); }
+    }
+  </style>
+  </head>
+  <body>
+    <header>
+        <div class="main-header">
+            <div class="header-logo">
+                <img src="assets/images/pictos/Train.svg" style="height: inherit; width: 50px;">
+                <span>
+                    <h2 style="font-size: 1.5em;">Traces des trains</h2>
+                    <h2 style="font-size: 0.65em;">d'Ile-de-France</h2>
+                </span>
+            </div>
+            <div style="display: flex; justify-content: center; gap: .2em;font-size: 1.5em;position: absolute; top:50%;left:50%;transform:translate(-50%,-50%)"><span class="train-ico">T</span><img class="Logotext Lettre-text" src="assets/images/pictos/R.svg"><img class="Logotext Lettre-text" src="assets/images/pictos/A.svg"><img class="Logotext Lettre-text" src="assets/images/pictos/N.svg"><span class="train-ico">S</span><span class="train-ico">I</span><img class="Logotext Lettre-text" src="assets/images/pictos/P.svg"><span class="train-ico">I</span><img class="Logotext Lettre-text" src="assets/images/pictos/N.svg"></div>
+            <div style="display: flex; align-items: center;">
+            <span>
+                <h2>Oui, </h2>
+                <h2 style="font-size: 0.65em;padding: 2px;">Y'a des trucs après </h2>
+            </span>
+            <img style="height: 50px;" src="assets/images/pictos/E.svg"></h2></div>
+        </div>
+        <div class="image-container">
+            <img class="slider-image" src="assets/images/photos/Z_50000_Transilien_IDF_Mobilités.jpg">
+            <div class="overlay"></div>
+                <ul class="liste-circulaire" style="position: absolute; z-index: 1; color: white; bottom: 1%">
+                    <li>
+                      <a href="index.html">
+                      <span class="vertical-text"><span>Présentation</span><span style="font-size: 0.5em;">(+ Un peu d'Histoire)</span></span>
+                      <div class="cercle"></div></a>
+                    </li>
+                    <li>
+                      <a href="lines.html"><span class="vertical-text"><span>Les lignes</span><span style="font-size: 0.5em;">(+ Différence avec les RER)</span></span>
+                      <div class="cercle"></div></a>
+                    </li>
+                    <li>
+                      <a href="rames.html"><span class="vertical-text">Matériel Roulant</span>
+                        <div class="cercle"></div></a>
+                    </li>
+                    <li class="active">
+                      <a><span class="vertical-text">Quiz</span>
+                        <div class="cercle"></div></a>
+                    </li>
+              </ul>
+        </div>
+    </header>
+    <main>
+      <h1 style="text-align: center;">↓ Prêt pour le Quizz ? ↓</h1>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="clickable" style="padding: 5px; background-color: aqua; border-radius: 10px;" onclick="GameStart()">Mini-jeu ?</div>
+        <a style="width: 50%;" target="_blank" rel="noopener noreferrer" class="kahoot-hyper" href="https://create.kahoot.it/share/lignes-transiliens-d-ile-de-france/3d84cb48-11d8-4020-be59-c9fbee3b7d33">
+        <svg style="width: 100%;" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 586.66669 200" height="200" width="586.66669" xml:space="preserve" id="svg2" version="1.1"><metadata id="metadata8"><rdf:RDF><cc:Work rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/></cc:Work></rdf:RDF></metadata><defs id="defs6"><clipPath id="clipPath18" clipPathUnits="userSpaceOnUse"><path id="path16" d="M 0,150 H 440 V 0 H 0 Z"/></clipPath></defs><g transform="matrix(1.3333333,0,0,-1.3333333,0,200)" id="g10"><g id="g12"><g clip-path="url(#clipPath18)" id="g14"><g transform="translate(104,31.4004)" id="g20"><path id="path22" style="fill-opacity:1;fill-rule:nonzero;stroke:none" d="M 0,0 0.5,30.3 C -15.9,32.699 -16.2,10.699 -16.2,10.699 -14.6,-3.5 0,0 0,0 m -26.4,68.7 c 0,0 39.7,17.5 44.4,-14 L 17.4,-13 h -30.1 c 0,0 -13.2,-0.5 -17.3,14.1 0,0 -10.2,37.2 30,44.299 L 0.1,54.5 c 0,0 -7.6,8.1 -21.1,0 z M 336,98.8 320.2,-1.9 295,106.6 Z M 259.4,99 259.1,70.6 281.4,69.1 V 55.2 L 259.7,54 261.5,12 c 0,0 0.1,-3.301 6.9,-3.301 6.8,0 13.1,3.7 13.1,3.7 V -9 c 0.3,-6.5 -9,-9.301 -9,-9.301 C 242.7,-22.7 244.9,-3.2 244.9,-3.2 l -1,54.3 h -14 l -3.3,22.799 17.3,-0.599 v 32.099 z M 311.2,-9.601 h 13.4 l 5.1,-14.7 -12,-7.099 -12.2,8.4 z m -269,79 C 63.8,76.2 75.3,76.1 78.4,44.7 L 86.1,-9 H 65.7 L 64.4,22.1 62.5,44.2 C 62,59.7 47.9,55.8 43.6,53.899 L 44.7,-8.9 25.2,-8.2 22,113.399 41.8,118.6 Z M -21.5,82 -50,50.7 -31.1,-17.4 H -51.6 L -66.7,34.8 -81,21 l 0.2,-38.4 -23.2,0.799 V 93.1 L -80.8,99 V 52.3 l 39.2,37.4 z M 194,8.899 c 10.3,-1.2 19.1,8.201 18.5,20 C 211.9,40.8 207.1,48.2 197.4,48.399 187.7,48.6 181.8,37.5 182.9,24.6 183.8,14.8 189.9,9.399 194,8.899 m 2.3,55.301 c 18.8,-0.4 34.9,-16.1 36,-35.1 C 233.5,10 218.3,-7 198.4,-9 c -19.9,-2 -36,13.699 -36,35.1 0,21.4 15.2,38.4 33.9,38.1 M 136.2,26.6 c -0.8,-9.901 -7,-15.3 -11.1,-15.701 -10.3,-1.2 -19.1,8.101 -18.5,20 0.6,11.901 5.4,19.301 15.1,19.5 C 131.4,50.6 137.3,39.5 136.2,26.6 M 122.8,66.1 C 104.1,65.8 88,50 86.8,31 85.7,11.899 100.9,-5.101 120.7,-7.101 c 19.9,-2 36,13.8 36,35.101 0,21.399 -15.2,38.399 -33.9,38.1"/></g></g></g></g></svg>
+        </a>
+        <div class="clickable" style="padding: 5px; background-color: yellow; border-radius: 10px;" onclick="crashscene('onclick')">Surprise ?</div>
+      </div>
+      <div style="display: flex; justify-content: center; align-items: center;">
+        <span class="clickable" style="padding: 5px; background-color: red; border-radius: 10px;" onclick="afficherquiz()">Kahootophobe ?</span>
+      </div>
+    </main>
+    <div id="specialDiv" style="display: none; background-color: rgba(0, 0, 0, 0.5); position: fixed; top: 0; left: 0; height: 100vh; width: 100vw; z-index: 100000; justify-content: center; align-items: center;">
+        <div class="secret-popup" id="secret-popup">
+            <div class="pad">
+                <div class="paddy">
+                    <h2 style="color: red; -webkit-text-stroke: 0.03em black;font-family: Comic Sans MS, Comic Sans, Comic Neue, cursive;white-space: nowrap;">Always gonnan't take me down</h2>
+                    <h2 style="font-size: 0.5em;">(Never gonna give me up)</h2>
+                    <p>Bravo jsp ce que t'as fait mais, maintenant tappe les mots opposés à ceux en haut...</p>
+                    <div class="button-container">
+                        <input class="Starbut Starint" type="text" id="user-input" style="padding:5px;" autocomplete="off">
+                        <div class="Starbut Starbutbut" onclick="closePopup()" id="closepop" style="height: 100%;"><p style="margin: 0; padding: 0;">Non merci</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="rickContainer">
+        <video id="rickroll" preload="none" style="position: absolute; top: 0; height:100vh;width:auto;pointer-events: none;" data-src="">
+          Votre navigateur ne supporte pas la vidéo.
+    </video></div>
+    <div id="bsod" style="display: none;"></div>
+    <div id="quizverlay" style="height: 100vh; top: 0; left: 0; width: 100vw; z-index: 3; position: fixed; background-color: rgba(0, 0, 0, 0.5); display: none; justify-content: center; align-items: center;">
+
+      <div id="quiz-container" style="width: 90%; height: 90%; border: 10px solid cyan; border-radius: 10px; position: relative;">
+
+        <div class="clickable" style="position: absolute;top: 0; right: 0;background-color: rgba(0, 0, 0, 0.5);color: white; padding: 1em; border-radius: 50%; transform: translate(50%, -50%);" onclick="quizaban()">X</div>
+
+      <form id="quiz" style="padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; height: 100%; background-color: white; padding: 5%; padding-top: 1%;">
+
+        <h2 id="titre-question" style="justify-content: top;"></h2>
+
+        <div class="champs" id="questions" style="flex-wrap: wrap;">
+      </div>
+      <p id="resultat" style="display: none;"></p>
+
+        <p id="inwarn" style="min-height: 1em;"></p>
+      
+        <button id="valiquiz" class="Starbut Starbutbut" type="button" onclick="verifier()" style="width: 100%; max-width: 620px;">Valider</button>
+      </form>
+
+      </div>
+
+  </div>
+    </body> 
+    <script src="trainfinder.js"></script>
+    <script src="disclaimer.js"></script>
+    <script src="test.js"></script>
+    <script>
+
+      let crashonrun = false
+
+const soundlimit = [];
+const maxSounds = 50;
+
+function playLimitedSoundFromPool(audioElement) {
+  // Si trop de sons jouent déjà, on ignore
+  if (soundlimit.length >= maxSounds) {
+    return;
+  }
+
+  const instance = audioElement.cloneNode(); // copie pour lecture indépendante
+  soundlimit.push(instance);
+
+  instance.play().catch(err => {
+    console.error("Lecture impossible :", err);
+    cleanup(); // Nettoie quand échec
+  });
+
+  function cleanup() {
+    const index = soundlimit.indexOf(instance);
+    if (index !== -1) {
+      soundlimit.splice(index, 1);
+    }
+    instance.src = ""; // libère la mémoire
+  }
+
+  instance.addEventListener("ended", cleanup);
+  instance.addEventListener("pause", cleanup);
+}
+
+let stoptitleloop = false
+let delay = 1000; // temps entre les ouvertures, diminue progressivement
+
+const oldStyles = []
+
+const urlParams = new URLSearchParams(window.location.search);
+
+const crashedpage = urlParams.get('crashed');
+
+function Rickpop() {
+  let congratulation = new Audio('assets/audio/sound effects/Tada W7.mp3');
+  congratulation.play()
+  document.getElementById("specialDiv").style.display = "flex";
+  setTimeout(() => {
+  document.querySelectorAll("#secret-popup, #secret-popup *").forEach(el => {
+  el.classList.remove('noshow')
+  })}, 100);
+}
+
+const nomouse =  document.createElement("style");
+  nomouse.id = "invimouse"
+  nomouse.innerHTML = `
+    * {
+      cursor: none !important;
+    }
+`;
+
+// Fonction pour activer le Blue Screen of Death
+function showBSOD() {
+  const bsod = document.createElement('div');
+  bsod.id = 'bsod';
+  document.body.appendChild(bsod);
+  document.head.appendChild(nomouse)
+}
+
+function createstarpop() {
+  // Création des éléments principaux
+const pad = document.createElement("div");
+pad.className = "pad";
+
+const paddy = document.createElement("div");
+paddy.className = "paddy";
+
+// Titre principal avec effet de texte
+const h2Main = document.createElement("h2");
+h2Main.textContent = "Always gonnan't take me down";
+h2Main.style.color = "red";
+h2Main.style.webkitTextStroke = "0.03em black";
+
+// Sous-titre
+const h2Sub = document.createElement("h2");
+h2Sub.textContent = "(Never gonna give me up)";
+h2Sub.style.fontSize = "0.5em";
+
+// Paragraphe d'instruction
+const p = document.createElement("p");
+p.textContent = "Bravo tu as trouvé le code secret, maintenant tappe les mots opposés à ceux en haut...";
+
+// Audios
+const audio1 = document.createElement("audio");
+audio1.id = "StarAlliesSelect";
+audio1.preload = true;
+const source1 = document.createElement("source");
+source1.src = "assets/audio/sound effects/Star Allies selected.mp3";
+source1.type = "audio/mp3";
+audio1.appendChild(source1);
+
+const audio2 = document.createElement("audio");
+audio2.id = "StarAlliesExit";
+audio2.preload = true;
+const source2 = document.createElement("source");
+source2.src = "assets/audio/sound effects/Star Allies selected 2.mp3";
+source2.type = "audio/mp3";
+audio2.appendChild(source2);
+
+// Conteneur de boutons
+const buttonContainer = document.createElement("div");
+buttonContainer.className = "button-container";
+
+// Checkbox avec son
+const checkbox = document.createElement("input");
+checkbox.className = "Starbut Starint";
+checkbox.type = "checkbox";
+checkbox.id = "user-input";
+checkbox.style.padding = "5px";
+checkbox.autocomplete = "off";
+checkbox.onclick = () => {
+    document.getElementById("StarAlliesSelect").play();
+};
+
+// Bouton de fermeture
+const closeButton = document.createElement("div");
+closeButton.className = "Starbut Starbutbut";
+closeButton.id = "closepop";
+closeButton.style.padding = "5px";
+closeButton.onclick = () => closePopup();
+
+const closeText = document.createElement("p");
+closeText.textContent = "Non merci";
+closeText.style.margin = "0";
+closeText.style.padding = "0";
+
+closeButton.appendChild(closeText);
+buttonContainer.appendChild(checkbox);
+buttonContainer.appendChild(closeButton);
+
+// Assemblage des éléments
+paddy.appendChild(h2Main);
+paddy.appendChild(h2Sub);
+paddy.appendChild(p);
+paddy.appendChild(audio1);
+paddy.appendChild(audio2);
+paddy.appendChild(buttonContainer);
+pad.appendChild(paddy);
+
+// Ajout au body ou à un autre conteneur
+document.body.appendChild(pad);
+
+}
+
+function executeAvecDelaiProgressif(callback, a, b, c) {
+    let startTime = Date.now();
+    let totalDuration = c;
+    let currentDelay = a;
+
+    function planifierProchaineExecution() {
+        let elapsed = Date.now() - startTime;
+        if (elapsed >= totalDuration) {
+            return; // Fin de l'exécution
+        }
+
+        setTimeout(() => {
+            callback();
+            currentDelay *= b;
+            planifierProchaineExecution();
+        }, currentDelay);
+    }
+
+    // Exécution immédiate de la première fois
+    callback();
+    planifierProchaineExecution();
+}
+
+function rotateAllElements() {
+  const allElements = document.body.querySelectorAll("*");
+
+  allElements.forEach(el => {
+    oldStyles.push(el.style.cssText);  // Sauvegarde de l'ancien style
+    el.style.transition = "all 3s";
+    el.style.transform = "rotate(15340deg)";
+    el.style.overflow = "visible"
+    el.style.height = "100%"
+    el.style.width = "100%"
+    el.style.fontSize = "1.2em"
+  });
+}
+
+function randomChar() {
+  return String.fromCharCode(Math.floor(Math.random() * (126 - 33 + 1)) + 33);
+}
+
+function randomTitle(length = 50) {
+  return Array.from({ length }, randomChar).join('');
+}
+
+const style = document.createElement("style");
+  style.innerHTML = `
+    * {
+      animation: none !important;
+      transition: none !important;
+    }
+`;
+
+function crash() {
+
+  crashonrun = true
+
+  const PreXPWindowserror = new Audio(`assets/audio/sound effects/PreXP Windows error.mp3`)
+
+  const XPWindowserror = new Audio(`assets/audio/sound effects/XP Windows error.mp3`)
+
+  const WindowsXPpluserror = new Audio(`assets/audio/sound effects/Windows XP+ error.mp3`)
+
+  const sonsErreur = [PreXPWindowserror, XPWindowserror, WindowsXPpluserror];
+
+  let Wiicrash = new Audio('assets/audio/sound effects/Wii console bios - crash sound.mp3');
+
+    rotateAllElements()
+
+    setTimeout(() => {
+
+  // Crée une superposition couvrant toute la page
+  const overlay = document.createElement("div");
+  Object.assign(overlay.style, {
+    position: "fixed",
+    top: "0",
+    left: "0",
+    width: "100vw",
+    height: "100vh",
+    background: "rgba(255, 255, 255, 0.5)", // transparent ou semi-transparent
+    zIndex: "1000",
+    pointerEvents: "all",  // bloque tous les clics/survols
+    cursor: "wait"
+  }); 
+  overlay.id = "crashed";
+  // Bloque le scroll
+  document.body.classList.add('noscroll');
+
+  const cursors = ["wait", "context-menu", "none", "progress", "pointer", "crosshair", "help", "move", "text", "not-allowed", "cell", "text", "vertical-text", "alias", "copy", "no-drop","grab" , "grabbing", "all-scroll", "col-resize", "row-resize", "zoom-out","ns-resize", "ew-resize", "nwse-resize"];
+  let i = 0;
+  let cursorhell = setInterval(() => {
+    document.getElementById("crashed").style.cursor = cursors[i % cursors.length];
+    i++;
+  }, 10);
+
+    (function loopTitle() {
+      document.title = randomTitle();
+      if (!stoptitleloop) {
+      requestAnimationFrame(loopTitle);} // environ 60 fois par seconde
+    }());
+
+  // Supprime toutes les transitions / animations
+  const messages = [
+  "Erreur critique 💥",
+  "ZA WARUDO ⏳",
+  "Système compromis 🛑",
+  "Virus détecté 🦠",
+  "Connexion perdue",
+  "Vous venez de gagner un chèque de 2000€ !",
+  "Skill issue",
+  "Serveur introuvable 🌐",
+  "Train en grève",
+  "404 dimension introuvable 🌀"
+];
+
+let popups = [];
+let time = 0;
+const start = Date.now();
+
+let blueScreentime = 10000
+
+const errorsActifs = [];
+
+executeAvecDelaiProgressif(() => {
+  time = Date.now() - start;
+
+  // Position aléatoire
+  const x = Math.floor(Math.random() * window.innerWidth);
+  const y = Math.floor(Math.random() * window.innerHeight);
+
+  // Crée l'élément popup
+  const popup = document.createElement("div");
+  popup.id = "temp-popup";  // ID unique
+  popup.style.position = "fixed";
+  popup.style.left = `${x}px`;
+  popup.style.top = `${y}px`;
+  popup.style.width = "200px";
+  popup.style.backgroundColor = "#111";
+  popup.style.color = "#0f0";
+  popup.style.display = "flex";
+  popup.style.alignItems = "center";
+  popup.style.flexDirection = "column";
+  popup.style.justifyContent = "center";
+  popup.style.fontFamily = "monospace";
+  popup.style.zIndex = 1001;
+  popup.style.borderRadius = "10px";
+  popup.style.overflow = "hidden"
+  popup.style.pointerEvents = "none"
+
+  // Choisir un message aléatoire
+  const msg = messages[Math.floor(Math.random() * messages.length)];
+  popup.innerHTML = `<h5 style="margin:0;padding:0;text-align:left; border: 1px solid white;width:100%;padding-left:4px;color:white;background:blue">Erreur critique</h5><div style="display:flex;justify-content:center;align-items:centerheight:80%"><h2>${msg}</h2>`;
+
+  // Ajouter à la page
+  document.body.appendChild(popup);
+  const sonAleatoire = sonsErreur[Math.floor(Math.random() * sonsErreur.length)];
+  playLimitedSoundFromPool(sonAleatoire);
+  // Ajouter à la liste des popups
+  popups.push(popup);
+
+}, 2000, 0.3, blueScreentime);
+
+  document.head.appendChild(style);
+
+  document.body.appendChild(overlay);
+
+  setTimeout (() => {
+    errorsActifs.forEach(son => {
+      son.pause()
+    });
+    errorsActifs.length = 0;   // Vide le tableau
+    showBSOD()
+    clearInterval(cursorhell)
+    Wiicrash.play()
+    popups.forEach(el => {
+      el.remove()
+    })
+    popups.length = 0
+    stoptitleloop = true
+    style.remove()
+    setTimeout (() => {
+    Wiicrash.pause()
+    Wiicrash.onpause = () => {
+    document.body.querySelectorAll("*").forEach((el, index) => {
+      el.style.cssText = oldStyles[index];
+  });
+      document.title = 'RAAAAAAAHHHH'
+      Rickpop()
+      overlay.remove()
+      crashonrun = false
+    }
+    },2000)
+  // Crée un curseur emoji personnalisé
+  const customCursor = document.createElement('div');
+  customCursor.id='custom-cursor';
+  customCursor.innerHTML = '👾'; // Emoji ici
+  document.body.appendChild(customCursor);
+
+  // Met à jour la position du curseur personnalisé
+  document.addEventListener('mousemove', (e) => {
+      customCursor.style.left = `${e.pageX}px`;
+      customCursor.style.top = `${e.pageY}px`;
+  });
+  },blueScreentime+1000);
+  }, 1000)
+}
+
+        // Séquence cible
+        const sequence = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
+        const gamepass = ["g", "a", "m", "e"]
+        const Gamepass = ["G", "A", "M", "E"]
+        let currentIndex = 0;
+        let currentIndex2 = 0;
+
+        function rameshowcase(rame) {
+            alert(`tu as choisis ${rame} (${currentuses})`)
+        }
+
+        currentuses = 0
+
+        let jeuxJoués = [];
+        document.addEventListener("keydown", (event) => {
+            if (event.key === gamepass[currentIndex]) {
+                currentIndex++;
+                if (currentIndex === gamepass.length) {
+                    // Séquence complète détectée
+                    let resultat = GameStart();
+                    currentIndex = 0; // Reset pour une prochaine détection
+                    console.log(resultats.end)
+                    if (resultats?.end === true) {
+                      if (!jeuxJoués.includes(resultats.game)) {
+                        jeuxJoués.push(resultats.game);
+                      }
+
+                      if (jeuxJoués.includes("FindLine") && jeuxJoués.includes("GuessLine")) {
+                        crashscene('100%')
+                      }
+                    }                    
+                }
+            } 
+            else if (event.key === Gamepass[currentIndex]) {
+                currentIndex++;
+                if (currentIndex === Gamepass.length) {
+                    // Séquence complète détectée
+                    let resultat = GameStart()
+                    console.log(resultat)
+                    currentIndex = 0; // Reset pour une prochaine détection
+                    
+                    if (resultats?.end === true) {
+                      if (!jeuxJoués.includes(resultats.game)) {
+                        jeuxJoués.push(resultats.game);
+                      }
+
+                      if (jeuxJoués.includes("FindLine") && jeuxJoués.includes("GuessLine")) {
+                        crashscene('100%')
+                      }
+                    }
+                }
+            } 
+            else {
+                // Mauvaise touche => on recommence
+                currentIndex = 0;
+            }
+
+              if (event.key === sequence[currentIndex2]) {
+                currentIndex2++;
+                if (currentIndex2 === sequence.length) {
+                crashscene('code')
+                }} else {
+                // Mauvaise touche => on recommence
+                currentIndex2 = 0;
+                if (event.key === sequence[currentIndex2]) {
+                  currentIndex2++;
+                }
+            }
+
+            if (document.getElementById("specialDiv").style.display === "none") {
+                document.querySelectorAll("#secret-popup, #secret-popup *").forEach(el => {
+                    el.classList.add('noshow')
+            });
+        }});
+
+    function crashscene(condition) {
+      if (crashonrun) {return}
+      if (condition === '100%') {alert("Bien joué tu as finis les jeux !");}
+      else if (condition === 'onclick') {alert("Tu as cliqués plus aucun retour en arrière désormais !");}
+      else if (condition === 'code') {alert("Tu as trouvé ce code secret ?!");}
+      else {alert("Non mais t'as fini de hac- DevTools mon site web ? Inacceptable !");}
+      alert("Tu pensais que quelque chose allait se déclencher ?");
+      alert("Ouais bah non j'ai pas envie Mdr");
+      prompt("Ah retappe le pour voir :");
+      alert("Non j'rigole ça sert à rien");
+      alert("Comment ça un gorille bat 100 hommes ?");
+      alert("Vous venez de gagner 200€ : encaisser vos coordonnées bancaires !");
+      alert("Désolé mais vous devez regarder une pub pour débloquer ce contenu spécial");
+      alert('Quelle fonction alert("Quelle fonction alert("Quelle fonction alert("Quelle fonction alert("Quelle fonction alert("Quelle fonction alert("Quelle fonction alert("Quelle fonction alert("Quelle fonction alert("Quelle fonction alert("Quelle fonction alert("Quelle fonction alert()")")")")")")")")")")")?');
+      alert("Bon ça suffit tu vas goûter à ma technique ultime");
+      alert("crash(DOCM)");
+      crash()
+    }
+      
+    function closePopup() {
+        document.querySelectorAll("#secret-popup, #secret-popup *").forEach(el => {
+                    el.classList.add('noshow')
+                    currentIndex2 = 0
+                    document.getElementById('user-input').value = '';
+                    currentWordIndex = 0
+                    document.title = "Passons au quiz ?"
+                    applyTrembleEffect(currentWordIndex)
+                    if(document.getElementById('bsod')) {document.getElementById('bsod').remove()}
+            });
+        setTimeout(() => {
+            document.getElementById("specialDiv").style.display = 'none'
+            document.body.classList.remove('noscroll')
+            if (!document.getElementById('ksacomeback')) {
+            let comeback = document.createElement("div")
+            comeback.style.position = "fixed"
+            comeback.style.bottom = "0"
+            comeback.style.right = "0"
+            comeback.style.backgroundColor = "blue"
+            comeback.style.color = "white"
+            comeback.style.padding = "2px"
+            comeback.innerHTML = "Changement d'avis ?"
+            comeback.id = 'ksacomeback'
+            comeback.onclick = Rickpop
+            document.body.appendChild(comeback)
+            }
+        }, 500)
+        currentuses = 0
+    }
+
+  const input = document.getElementById('user-input');
+  const video = document.getElementById("rickroll");
+  const videoContainer = document.getElementById('rickContainer');
+  
+  const inputWords = ['Never', 'gonna', 'give', 'you', 'up']; // Séquence des mots
+  let currentWordIndex = 0; // Suivi du mot actuel tapé
+  
+  input.addEventListener('input', () => {
+    const typedText = input.value.trim().toLowerCase(); // Convertir en minuscule
+    const typedWords = typedText.split(' ');
+
+    // Vérifier si l'utilisateur a écrit le mot correct
+    if (typedWords[typedWords.length - 1] === inputWords[currentWordIndex].toLowerCase()) {
+      input.classList.remove('incorrect');
+      input.classList.add('correct');
+      currentWordIndex++;
+
+      // Appliquer l'effet de tremblement
+      applyTrembleEffect(currentWordIndex);
+    } else {
+      input.classList.remove('correct');
+      input.classList.add('incorrect');
+    }
+
+    // Vérifier si la séquence complète a été tapée
+    if (currentWordIndex === inputWords.length) {
+      input.setAttribute('disabled', 'true');
+      // Afficher la vidéo
+      videoContainer.style.display = 'flex';
+      video.play();
+      if (style) {style.remove()}
+      document.getElementById("specialDiv").style.display = "none";
+      if(document.getElementById('bsod')) {document.getElementById('bsod').remove()}
+      document.getElementById("secret-popup").classList.add('noshow');
+
+      const subtitle = document.createElement('div')
+      subtitle.style.textAlign = 'center'
+      subtitle.style.fontSize = '2em'
+      subtitle.style.webkitTextStroke = '0.01em solid black'
+      subtitle.style.color = 'white'
+      subtitle.style.position = 'absolute'
+      subtitle.style.bottom = '5%'
+      subtitle.style.left = '50%'
+      subtitle.style.transform = 'translate(-50%, 0)'
+      subtitle.innerHTML = '<a href="https://www.youtube.com/watch?v=IGcvDQfOBG0" target="_blank" rel="noopener noreferrer">vidéo originale (de cette partie)</a>.'
+      
+      setTimeout(() => {
+        input.removeAttribute('disabled', 'true');
+        input.value = ''; // Réinitialiser l'input
+        input.style.position = 'static';
+        input.style.height = '';
+        currentWordIndex = 0
+      }, 100);
+
+      setTimeout(() => {
+        videoContainer.appendChild(subtitle)
+      }, 5000)
+
+      setTimeout(() => {
+        subtitle.remove()
+      }, 15000)      
+
+      // Lorsque la vidéo se termine, changer de page
+      video.onended = () => {
+        setTimeout(() => {
+          videoContainer.style.display = 'none';
+          if(document.getElementById('bsod')) {document.getElementById('bsod').remove()}
+          document.body.classList.remove('noscroll')
+          document.title = "Passons au quiz ?"
+          if (!document.getElementById('ksacomeback')) {
+          let comeback = document.createElement("div")
+            comeback.style.position = "fixed"
+            comeback.style.bottom = "0"
+            comeback.style.right = "0"
+            comeback.style.backgroundColor = "blue"
+            comeback.style.color = "white"
+            comeback.style.padding = "2px"
+            comeback.textContent = "Changement d'avis ?"
+            comeback.onclick = Rickpop
+            document.body.appendChild(comeback)}  
+          if (nomouse) {nomouse.remove()}
+          if (document.getElementById("custom-cursor")){document.getElementById("custom-cursor").remove()}
+        }, 3000);
+      };
+    }
+
+    if (currentWordIndex === 4 && !input.value.toLowerCase().includes('you')) {
+        currentWordIndex = 3
+    }
+
+    else if (currentWordIndex === 3 && !input.value.toLowerCase().includes('give')) {
+        currentWordIndex = 2
+    }
+
+    else if (currentWordIndex === 2 && !input.value.toLowerCase().includes('gonna')) {
+        currentWordIndex = 1
+    }
+
+    else if (currentWordIndex === 1 && !input.value.toLowerCase().includes('never')) {
+        currentWordIndex = 0
+        applyTrembleEffect(currentWordIndex);
+    }
+
+    let NoUmove;
+    // Détecter si "you" est dans la séquence et déplacer l'input
+    if (currentWordIndex >= 4) {
+        input.style.transition = 'all 0.02s';
+        const vidsource = document.createElement('source')
+        vidsource.src = "assets/video/Toncranela.mp4"
+        vidsource.type = 'video/mp4'
+        video.appendChild(vidsource);
+        NoUmove = setInterval(() => {
+            if (currentWordIndex >= 4 && document.activeElement === input) {
+            moveInputRandomly();}
+        },20)
+    }
+    else if (currentWordIndex === 3) {
+      clearInterval(NoUmove)
+      moveInputRandomly();
+    }
+    else if (currentWordIndex === 2) {
+      applyTrembleEffect()
+    }
+    else if (currentWordIndex === 1) {
+      applyTrembleEffect()
+    }
+    else {input.style.position = 'static'; input.style.height = '';input.style.transition = 'all 2s'; applyTrembleEffect()}
+  });
+
+  function applyTrembleEffect(wordCount) {
+    // Supprimer les classes de tremblement précédentes
+    input.classList.remove('tremble', 'trembleMore', 'trembleMoreExtreme');
+
+    if (currentWordIndex === 0) {
+      input.classList.remove('tremble'); // Tremblement léger pour "Never"
+      input.style.position = "static"
+      input.height = ""
+    }
+    // Appliquer l'effet de tremblement basé sur le nombre de mots trouvés
+     else if (currentWordIndex === 1) {
+      input.classList.add('tremble'); // Tremblement léger pour "Never"
+    } else if (currentWordIndex === 2) {
+      input.classList.add('trembleMore'); // Plus fort pour "Gonna"
+    } else if (currentWordIndex === 3) {
+      input.classList.add('trembleMore'); // Très fort pour "Give"
+    } else if (currentWordIndex === 4) {
+      input.classList.add('trembleMore'); // De nouveau léger pour "You"
+    }
+  }
+
+  function moveInputRandomly() {
+    // Déplacer l'input à une position aléatoire
+    let maxWidth = window.innerWidth - input.offsetWidth;
+    let maxHeight = window.innerHeight - input.offsetHeight;
+
+    let randomX = Math.floor(Math.random() * maxWidth);
+    let randomY = Math.floor(Math.random() * maxHeight);
+
+    input.style.position = 'fixed';
+    input.style.left = `${randomX}px`;
+    input.style.top = `${randomY}px`;
+    input.style.height = '2em';
+  }
+  const inputElement = document.getElementById('user-input');
+
+const closebut = document.getElementById('closepop');
+document.addEventListener("DOMContentLoaded", function () {
+    const lastExecution = localStorage.getItem('lastpromptalert');
+    const currentDate = new Date();
+  
+    // Si aucune date n'est enregistrée, ou si plus d'une semaine s'est écoulée
+    if (!lastExecution || (currentDate - new Date(lastExecution)) >= 24 * 60 * 60 * 1000) {
+      alert('Attention cette page utilise beaucoup de popup ("indique" comme celui là). Pour éviter tout problème, évitez de les bloquer/désactiver.')
+      localStorage.setItem('lastpromptalert', currentDate.toISOString());
+    }
+});
+    </script>
+    <script src="apixtract.js"></script>
+    <script src="slider.js"></script>
+    <script src="sourcemedias.js"></script>
+</html>

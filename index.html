@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Présentation des trains d'IDF</title>
+  <link id="licon" rel="shortcut icon" type="image/x-icon" href="assets/Transilien RATP.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="indicesIDF.js"></script>
+  </head>
+  <body>
+    <header>
+        <div class="main-header">
+            <div class="header-logo">
+                <img src="assets/images/pictos/Train.svg" style="height: inherit; width: 50px;">
+                <span>
+                    <h2 style="font-size: 1.5em;">Traces des trains</h2>
+                    <h2 style="font-size: 0.65em;">d'Ile-de-France</h2>
+                </span>
+            </div>
+            <div style="display: flex; justify-content: center; gap: .2em;font-size: 1.5em;position: absolute; top:50%;left:50%;transform:translate(-50%,-50%)"><span class="train-ico">T</span><img class="Logotext Lettre-text" src="assets/images/pictos/R.svg"><img class="Logotext Lettre-text" src="assets/images/pictos/A.svg"><img class="Logotext Lettre-text" src="assets/images/pictos/N.svg"><span class="train-ico">S</span><span class="train-ico">I</span><img class="Logotext Lettre-text" src="assets/images/pictos/P.svg"><span class="train-ico">I</span><img class="Logotext Lettre-text" src="assets/images/pictos/N.svg"></div>
+            <div style="display: flex; align-items: center;">
+            <span>
+                <h2>Oui, </h2>
+                <h2 style="font-size: 0.65em;padding: 2px;">Y'a des trucs après </h2>
+            </span>
+            <img style="height: 50px;" src="assets/images/pictos/E.svg"></h2></div>
+        </div>
+        <div class="image-container">
+            <img class="slider-image" src="assets/images/photos/Z50000_carmillon.jpg">
+            <div class="overlay"></div>
+                <ul class="liste-circulaire" style="position: absolute; z-index: 100000; color: white; bottom: 1%">
+                    <li class="active">
+                      <a>
+                      <span class="vertical-text"><span>Présentation</span><span style="font-size: 0.5em;">(+ Un peu d'Histoire)</span></span>
+                      <div class="cercle"></div></a>
+                    </li>
+                    <li>
+                      <a href="lines.html"><span class="vertical-text"><span>Les lignes</span><span style="font-size: 0.5em;">(+ Différence avec les RER)</span></span>
+                      <div class="cercle"></div></a>
+                    </li>
+                    <li>
+                      <a href="rames.html"><span class="vertical-text">Matériel Roulant</span>
+                        <div class="cercle"></div></a>
+                    </li>
+                    <li>
+                      <a href="quiz.html"><span class="vertical-text">Quiz</span>
+                        <div class="cercle"></div></a>
+                    </li>
+              </ul>
+        </div>
+    </header>
+    <main>
+        <h1 style="text-align: center;">C'est quoi un Transilien ?</h1>
+        <p>Premièrement Transilien ne désigne pas une ligne ou une entreprise contrairement à ce que tout le monde pense.
+            Transilien est une marque commercial de la SNCF utilisé pour désigner les trains de banlieues d'Île-de-France sous l'autorité d'Île-de-France Mobilités (RER compris).
+        </p>
+        <p>Transilien SNCF exploite ces lignes <span style="color: white; -webkit-text-stroke: 0.05em black;">avec</span> ou <span style="color: #86bc25;">sans</span> la <span style="color: rgb(10, 0, 130);">RATP</span> pour le compte d'Île-de-France Mobilités</p>
+        <div class="section-reseau">
+          <div class="mode-reseau">
+            <div class="mode">
+              <img src="assets/images/pictos/RER.svg">
+              <h2>RER</h2>
+            </div>
+            <div class="reseau">
+              <img src="assets/images/pictos/A.svg" class="both">
+              <img src="assets/images/pictos/B.svg" class="both">
+              <img src="assets/images/pictos/C.svg" class="SNCF">
+              <img src="assets/images/pictos/D.svg" class="SNCF">
+              <img src="assets/images/pictos/E.svg" class="SNCF">
+            </div>
+          </div>
+          <div class="mode-reseau" style="gap: 7px;">
+            <div class="mode">
+              <img src="assets/images/pictos/Tram.svg">
+              <h2>Tramway</h2>
+            </div>
+            <div class="reseau tram">
+              <img src="assets/images/pictos/T1.svg" class="RATP">
+              <img src="assets/images/pictos/T2.svg" class="RATP">
+              <img src="assets/images/pictos/T3a.svg" class="RATP">
+              <img src="assets/images/pictos/T3b.svg" class="RATP">
+              <img src="assets/images/pictos/T4.svg" class="others">
+              <img src="assets/images/pictos/T5.svg" class="RATP">
+              <img src="assets/images/pictos/T6.svg" class="RATP">
+              <img src="assets/images/pictos/T7.svg" class="RATP">
+              <img src="assets/images/pictos/T8.svg" class="RATP">
+              <img src="assets/images/pictos/T9.svg" class="others">
+              <img src="assets/images/pictos/T10.svg" class="others">
+              </div>
+              <div class="mode">
+                <h4 style="margin: 0;">Tramway Express</h4>
+              </div>
+              <div class="reseau tram">
+                <img src="assets/images/pictos/T11.svg" class="others">
+                <img src="assets/images/pictos/T12.svg" class="SNCF">
+                <img src="assets/images/pictos/T13.svg" class="SNCF">
+                <img src="assets/images/pictos/T14.svg" class="others">
+              </div>
+            </div>
+          <div class="mode-reseau">
+            <div class="mode">
+              <img src="assets/images/pictos/Train.svg">
+              <h2>Trains de banlieues</h2>
+            </div>
+            <div class="reseau">
+              <img src="assets/images/pictos/H.svg" class="SNCF">
+              <img src="assets/images/pictos/J.svg" class="SNCF">
+              <img src="assets/images/pictos/K.svg" class="SNCF">
+              <img src="assets/images/pictos/L.svg" class="SNCF">
+              <img src="assets/images/pictos/N.svg" class="SNCF">
+              <img src="assets/images/pictos/P.svg" class="SNCF">
+              <img src="assets/images/pictos/R.svg" class="SNCF">
+              <img src="assets/images/pictos/U.svg" class="SNCF">
+              <img src="assets/images/pictos/V.svg" class="SNCF">
+            </div>
+         </div>
+        </div>
+        <p style="font-size: 1.5em;">Les lignes de train de banlieues "Transilien" sont des trains de banlieues reliant en grande partie la grande couronne à Paris. Elles sont comparables aux RER mais contrairement à ces derniers elles ne traversent pas Paris. Mais, elles peuvent être assez similaires.</p>
+        <h2>Train de banlieues ou Transilien ? d'oû vienne ces termes ?</h2>
+        <div style="display: flex; justify-content: space-around; flex-direction: column; gap: 100px;">
+        <div>
+          <span style="margin-left: 3em; color: white; background-color: magenta; font-size: 1.17em; font-weight: 700; padding: 0 10px;;">En 1990</span>
+          <div class="histosec" style="border-color: magenta;">
+            <div style="display: flex; flex-direction: column; align-items: center;font-size: 3em;width: 50%;">
+              <img src="assets/images/pictos/Autoroute_F.svg" class="Logotext">
+              <div style="flex-direction: row;"><img src="assets/images/pictos/RER.svg" class="Logotext"> <img src="assets/images/pictos/A.svg" class="Logotext"> <img src="assets/images/pictos/B.svg" class="Logotext"> <img src="assets/images/pictos/C.svg" class="Logotext"> <img src="assets/images/pictos/D.svg" class="Logotext"></div>
+              <h2>saturées</h2>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: flex-start;font-size: 2em;width: 50%;">
+              La SNCF 
+              recherche un label pour les trains de banlieues d'Île-de-France (choix entre TER IDF, Citélien ou juste RER)
+            </div>
+          </div>
+        </div>
+        <div>
+          <span style="margin-left: 3em; color: white; background-color: #49ac42; font-size: 1.17em; font-weight: 700; padding: 0 10px;;">En 1999</span>
+          <div class="histosec" style="border-color: #49ac42;">
+            <div style="display: flex; flex-direction: column; align-items: center;font-size: 3em;width: 50%;">
+              <span>Transilien</span>
+              <h2>Retenue</h2>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: flex-start;font-size: 1.5em;width: 50%;">
+              Elle désigne alors toutes les lignes de banlieues non-RER en Île-de-France (F, G, H, J, K) ou même les portions RER exploité par la SNCF (tous sauf RER B entre Paris Nord et Saint-Rémy et RER A de St-Germain-en-Laye à Marne-la-Vallée / Boissy-Saint-Léger)
+            </div>
+          </div>
+        </div>
+        </div>
+        <h1>Mais de base ça commence à <img src="assets/images/pictos/H.svg" class="Logotext">, nan ?</h1>
+        <p>Oui c'est vrai, mais ça (Transilien F), c'était avant. C'était les lettres utilisés en 2001, mais en 2004 tout à changer :</p>
+        <div style="border-radius: 10px;overflow: hidden; width: 75%;border: 1px solid black;">
+        <table border="1" style="width: 100%; text-align: center; font-size: 2em;border-collapse: collapse;">
+          <tr>
+            <thead style="background-color: black; color: white;font-size: 0.75em;">
+            <th>Ancienne</th>
+            <th>Relations</th>
+            <th>Nouvelles</th>
+            </thead>
+          </tr>
+          <tr>
+            <td rowspan="2"><span class="mode-picto"><img src="assets/images/pictos/Transilien-train (SNCF).svg" class="Logotext"><span class="train-ico">F</span></span></td>
+            <td style="font-size: 0.75em;">Groupes II et III</td>
+            <td><span class="mode-picto"><img src="assets/images/pictos/Train.svg" class="Logotext"><img src="assets/images/pictos/L.svg" class="Logotext"></span></td>
+          </tr>
+          <tr>
+            <td style="font-size: 0.75em;">Groupes IV V</td>
+            <td><span class="mode-picto"><img src="assets/images/pictos/Train.svg" class="Logotext"><img src="assets/images/pictos/J.svg" class="Logotext"></span></td>
+          </tr>
+          <tr>
+            <td><span class="mode-picto"><img src="assets/images/pictos/Transilien-train (SNCF).svg" class="Logotext"><span class="train-ico">G</span></span></td>
+            <td></td>
+            <td><span class="mode-picto"><img src="assets/images/pictos/Train.svg" class="Logotext"><img src="assets/images/pictos/N.svg" class="Logotext"></span></td>
+          </tr>
+          <tr>
+            <td rowspan="2"><span class="mode-picto"><img src="assets/images/pictos/Transilien-train (SNCF).svg" class="Logotext"><span class="train-ico">H</span></span></td>
+            <td style="font-size: 0.75em;">Paris Nord - Persan-Beaumont / Pontoise / Creil</td>
+            <td><span class="mode-picto"><img src="assets/images/pictos/Train.svg" class="Logotext"><img src="assets/images/pictos/H.svg" class="Logotext"></span></td>
+          </tr>
+          <tr>
+            <td style="font-size: 0.75em;">Paris Nord - Crépy-en-Valois</td>
+            <td><span class="mode-picto"><img src="assets/images/pictos/Train.svg" class="Logotext"><img src="assets/images/pictos/K.svg" class="Logotext"></span></td>
+          </tr>
+          <tr>
+            <td><span class="mode-picto"><img src="assets/images/pictos/Transilien-train (SNCF).svg" class="Logotext"><span class="train-ico">J</span></span></td>
+            <td></td>
+            <td><span class="mode-picto"><img src="assets/images/pictos/Train.svg" class="Logotext"><img src="assets/images/pictos/P.svg" class="Logotext"></span></td>
+          </tr>
+          <tr>
+            <td><span class="mode-picto"><img src="assets/images/pictos/Transilien-train (SNCF).svg" class="Logotext"><span class="train-ico">K</span></span></td>
+            <td></td>
+            <td><span class="mode-picto"><img src="assets/images/pictos/Train.svg" class="Logotext"><img src="assets/images/pictos/R.svg" class="Logotext"></span></td>
+          </tr>
+          <tr>
+            <td colspan="2"><span style="font-size: 0.75em;">Tangentille Défense - La Verrière</span> <span class="mode-picto">(<img src="assets/images/pictos/Transilien-train (SNCF).svg" class="Logotext"><span class="train-ico">F</span><span class="train-ico">G</span></span>)</td>
+            <td><span class="mode-picto"><img src="assets/images/pictos/Train.svg" class="Logotext"><img src="assets/images/pictos/U.svg" class="Logotext"></span></td>
+          </tr>
+        </table>
+        </div>
+    </main>
+    <script src="disclaimer.js"></script>
+    <script src="sourcemedias.js"></script>
+    <script src="apixtract.js"></script>
+    <script src="slider.js"></script>
+    <script src="processor.js"></script>
+    <script>
+      window.onload = function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const Blewup = urlParams.get('Blewup');
+    const windsound = new Audio('assets/audio/sound effects/Microsoft Windows XP Startup.mp3')
+
+    // Cacher tout le contenu de la page au départ
+    const title = document.title
+    const favicon = document.getElementById("licon");
+    const actualicon = favicon.href
+    if (Blewup) {
+    document.body.style.display = 'none';
+    document.title = 'BOOOOM';
+    const pop = new Audio('assets/audio/sound effects/Pop sound effect.mp3')
+    if (favicon) favicon.href = '';
+        // Attendre 500 ms, jouer un son et afficher la page
+        setTimeout(function () {
+          let b=0
+          const init = () => {
+            if (b===0) {
+            b=1
+            pop.play();
+            windsound.play()
+            document.body.style.display = 'block';
+            document.title = title;
+            if (favicon) favicon.href = actualicon;
+            window.history.replaceState({}, document.title, window.location.pathname);
+            const lastExecution = localStorage.getItem('lastdisclaimer');
+            const currentDate = new Date();
+            if (!lastExecution || (currentDate - new Date(lastExecution)) >= 7 * 24 * 60 * 60 * 1000) {
+            // Exécuter la fonction ici
+            showDisclaimPopUp(currentDate);
+          }
+        }}
+
+          document.addEventListener('keydown', init, { once: true });
+          document.addEventListener('click', init, { once: true });
+        }, 200);
+
+    } else {
+        // Afficher la page normalement
+        document.body.style.display = 'block';
+        document.title = title;
+        if (favicon) favicon.href = actualicon;
+    }
+    setTimeout(() => {
+      const lastExecution = localStorage.getItem('lastdisclaimer');
+      const currentDate = new Date();
+  
+      // Si aucune date n'est enregistrée, ou si plus d'une semaine s'est écoulée
+      if (!lastExecution || (currentDate - new Date(lastExecution)) >= 7 * 24 * 60 * 60 * 1000) {
+        showDisclaimPopUp(currentDate);
+      }
+    }, 5000)
+};
+    </script>
+    <footer></footer>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+# files that are too heavy
+!assets/
+!assets/styles.css
+assets/
+*.zip
+
+secrets/
+
+# System Files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

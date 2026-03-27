@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Lignes de trains de banlieues en IDF</title>
+  <link rel="shortcut icon" type="image/x-icon" href="assets/Transilien RATP.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="mapmenu.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="transportmap.css" />
+  <script src="indicesIDF.js"></script>
+  <style>
+
+    #mapContainer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: none;
+      z-index: 999;
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+
+    #showMap {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      font-size: 1.2rem;
+      padding: 10px 20px;
+      background-color: blue;
+      color: white;
+      border: 0;
+      border-radius: 0 10px 0 0;
+      z-index: 11;
+      cursor: pointer;
+    }
+
+    .expandable {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 1px;
+      height: 1px;
+      background-color: blue;
+      border-radius: 0 50% 0 0;
+      transition: all 0.15s;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2em;
+      font-weight: 700;
+    }
+
+    .show-confirm{
+      opacity: 0;
+      transition: all 0.2s;
+    }
+
+    #showMap:hover .expandable{
+      height: 100vh;
+      width: 50vw;
+      z-index: 3000;
+    }
+
+    #showMap:active .expandable{
+      height: 100vh;
+      width: 100vw;
+      border-radius: 0;
+      background-color: #aaa;
+      color: black;
+      z-index: 3000;
+    }
+
+    #showMap:hover .show-confirm{
+      opacity: 100%;
+    }
+
+    #closeMap {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 1002;
+      padding: 10px 20px;
+      background: white;
+      border: 0;
+      border-radius: 0 0 0 10px;
+      cursor: pointer;
+    }
+
+    .close-confirm{
+      opacity: 0;
+      transition: all 0.2s;
+      color: white;
+    }
+
+    #closeMap .expandable {
+      position: fixed;
+      top: 0;
+      left: 100%;
+      height: 1px;
+      width: 1px;
+      border-radius: 0 0 0 100%;
+      background-color: #aaa;
+    }
+
+    #closeMap:hover .expandable{
+      left: 50%;
+      height: 100vh;
+      width: 50vw;
+      z-index: 3000;
+    }
+
+    #closeMap:active .expandable {
+      left: 0;
+      right: 50%;
+      height: 100vh;
+      width: 100vw;
+      border-radius: 0;
+      background-color: blue;
+      color: black;
+      z-index: 3000;
+    }
+
+    #closeMap:hover .close-confirm{
+      opacity: 100%;
+    }
+
+  </style>
+  <script src="cartotrain.js"></script>
+  <script src="cartostop.js"></script>
+  <script src="indicesIDF.js"></script>
+  </head>
+  <body>
+    <header>
+        <div class="main-header">
+            <div class="header-logo">
+                <img src="assets/images/pictos/Train.svg" style="height: inherit; width: 50px;">
+                <span>
+                    <h2 style="font-size: 1.5em;">Traces des trains</h2>
+                    <h2 style="font-size: 0.65em;">d'Ile-de-France</h2>
+                </span>
+            </div>
+            <div style="display: flex; justify-content: center; gap: .2em;font-size: 1.5em;position: absolute; top:50%;left:50%;transform:translate(-50%,-50%)"><span class="train-ico">T</span><img class="Logotext Lettre-text" src="assets/images/pictos/R.svg"><img class="Logotext Lettre-text" src="assets/images/pictos/A.svg"><img class="Logotext Lettre-text" src="assets/images/pictos/N.svg"><span class="train-ico">S</span><span class="train-ico">I</span><img class="Logotext Lettre-text" src="assets/images/pictos/P.svg"><span class="train-ico">I</span><img class="Logotext Lettre-text" src="assets/images/pictos/N.svg"></div>
+            <div style="display: flex; align-items: center;">
+            <span>
+                <h2>Oui, </h2>
+                <h2 style="font-size: 0.65em;padding: 2px;">Y'a des trucs après </h2>
+            </span>
+            <img style="height: 50px;" src="assets/images/pictos/E.svg"></h2></div>
+        </div>
+        <div class="image-container">
+            <img src="assets/images/plan/Plan reseau IDFM.png">
+            <div class="overlay"></div>
+            <ul class="liste-circulaire" style="position: absolute; z-index: 10; color: white; bottom: 2%">
+              <li>
+                <a href="index.html"><span class="vertical-text"><span>Présentation</span><span style="font-size: 0.5em;">(+ Un peu d'Histoire)</span></span>
+                <div class="cercle"></div></a>
+              </li>
+              <li class="active">
+                <a><span class="vertical-text"><span>Les lignes</span><span style="font-size: 0.5em;">(+ Différence avec les RER)</span></span>
+                <div class="cercle"></div></a>
+              </li>
+              <li>
+                <a href="rames.html"><span class="vertical-text">Matériel Roulant</span>
+                  <div class="cercle"></div></a>
+              </li>
+              <li>
+                <a href="quiz.html"><span class="vertical-text">Quiz</span>
+                  <div class="cercle"></div></a>
+              </li>
+        </ul>
+        </div>
+    </header>
+    <main>
+    <h1 style="text-align: center;">Ouais mais quelle différences avec les <img src="assets/images/pictos/RER.svg" class="Logotext"> ?</h1>
+    <div style="background-color:#e4e8ee; display: flex; justify-content: space-around;padding: 15px;gap: 10px;flex-wrap: wrap;">
+        <div class="comp-container">
+            <table>
+                <th style="font-size: 1.5em;"><img src="assets/images/pictos/RER.svg" class="Logotext" style="min-height: 2em;"></th>
+                <th>
+                    <h2 style="text-align: left;">
+                        RER / Train / Super Métro
+                    </h2>
+                </th>
+                <tr>
+                    <td colspan="100%">
+                        <ul style="text-align: left;">
+                            <li>A une appellation simple</li>
+                            <li>Traverse Paris</li>
+                            <li>Mixte de métro express et train de banlieues</li>
+                            <li>Exploité à la fois par la SNCF et la RATP</li>
+                            <li>A une meilleur fréquence généralement</li>
+                            <li>Desserte de banlieues + local en général</li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="comp-container">
+            <table>
+                <th><h2><img src="assets/images/pictos/Train.svg" class="Logotext" style="min-height: 2em;"></h2></th>
+                <th>
+                    <h2 style="text-align: left;">
+                        Transilien / Train / Ligne X / Train de banlieues
+                    </h2>
+                </th>
+                <tr>
+                    <td colspan="100%">
+                        <ul style="text-align: left;">
+                            <li>Possède nombreuses appellations</li>
+                            <li>Au départ d'une "grande gare" de Paris</li>
+                            <li>100% Train de banlieu</li>
+                            <li>Exploité à 100% par la SNCF (pour l'instant)...</li>
+                            <li>A une fréquence moins élevée <strong>généralement</strong></li>
+                            <li>Desserte de banlieues + express <strong>en général</strong></li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <h1 style="text-align: center;"><img src="assets/images/pictos/Train.svg" class="Logotext"> Les lignes</h1>
+    <div style="background-color:#e4e8ee; display: flex; justify-content: space-around;padding: 15px; flex-wrap: wrap;">
+        <div class="comp-container">
+            <div style="display: flex; flex-direction: column;">
+            <h2 style="border-bottom: 1px solid black;">Paris-Nord</h2>
+              <div class="reseaunb" style="margin-top: 8px;"><img src="assets/images/pictos/Train.svg"><img src="assets/images/pictos/H.svg"><img src="assets/images/pictos/K.svg"></div>
+              <div class="reseaunb" style="margin-top: 8px;"><img src="assets/images/pictos/RER.svg"><img src="assets/images/pictos/B.svg"><img src="assets/images/pictos/C.svg"><img src="assets/images/pictos/D.svg"></div>
+        </div>
+        </div>
+        <div class="comp-container">
+          <div style="display: flex; flex-direction: column;">
+          <h2 style="border-bottom: 1px solid black;">Paris-Est</h2>
+            <div class="reseaunb" style="margin-top: 8px;"><img src="assets/images/pictos/Train.svg"><img src="assets/images/pictos/P.svg"></div>
+            <div class="reseaunb" style="margin-top: 8px;"><img src="assets/images/pictos/RER.svg"><img src="assets/images/pictos/A.svg"><img src="assets/images/pictos/E.svg"></div>
+      </div>
+      </div>
+      <div class="comp-container">
+        <div style="display: flex; flex-direction: column;">
+        <h2 style="border-bottom: 1px solid black;">Paris-Lyon</h2>
+          <div class="reseaunb" style="margin-top: 8px;"><img src="assets/images/pictos/Train.svg"><img src="assets/images/pictos/D.svg"><img src="assets/images/pictos/R.svg"></div>
+          <div class="reseaunb" style="margin-top: 8px;"><img src="assets/images/pictos/RER.svg"><img src="assets/images/pictos/A.svg"><img src="assets/images/pictos/D.svg"></div>
+    </div>
+    </div>
+    <div class="comp-container">
+      <div style="display: flex; flex-direction: column;">
+      <h2 style="border-bottom: 1px solid black;">Paris Rive-Gauche</h2>
+        <div class="reseaunb" style="margin-top: 8px;"><img src="assets/images/pictos/Train.svg"><img src="assets/images/pictos/N.svg"><img src="assets/images/pictos/U.svg"><img src="assets/images/pictos/V.svg"></div>
+        <div class="reseaunb" style="margin-top: 8px;"><img src="assets/images/pictos/RER.svg"><img src="assets/images/pictos/C.svg"></div>
+    </div>
+    </div>
+    <div class="comp-container">
+        <div style="display: flex; flex-direction: column;">
+        <h2 style="border-bottom: 1px solid black;">Paris Saint-Lazare</h2>
+          <div class="reseaunb" style="margin-top: 8px;"><img src="assets/images/pictos/Train.svg"><img src="assets/images/pictos/J.svg"><img src="assets/images/pictos/L.svg"><img src="assets/images/pictos/U.svg"></div>
+          <div class="reseaunb" style="margin-top: 8px;"><img src="assets/images/pictos/RER.svg"><img src="assets/images/pictos/A.svg"></div>
+    </div>
+    </div>
+    </div></main>
+    <div id="showMap">Afficher la carte
+      <div class="expandable">
+        <span class="show-confirm">Afficher la carte</span>
+      </div>
+    </div>
+  <div id="mapContainer">
+    <div id="closeMap">Fermer la carte
+      <div class="expandable">
+        <span class="close-confirm">Fermer la carte</span>
+      </div>
+    </div>
+    <button class="sidebar-backbutton hidden" id="backbutton" onclick="menuBack()">&#10094;</button>
+  <div id="map"></div>
+  <div id="sidebar" style="right: -52%;">
+    <button id="sideclose" class="sidebar-close hidden" onclick="closeMenu()">❯</button>
+    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+    <div style="width: 50%; display: flex; flex-direction: column;">
+    <div class="logo-header">
+      <img id="travel-mode" src="" alt="">
+      <img id="ligneImage" src="" alt="">
+      <span id="lignepicto"></span>
+    </div>
+  </div>
+  <h2 id="network" class="net-header" style="color: black;"></h2>
+  </div>
+    <img id="planImage" src="" alt="">
+    <div id="infos">
+      <table style="width: 100%;">
+      <tbody>
+      <tr>
+        <th id="desserte-label">Desserte</th>
+        <th id="frequence-label">Fréquences</th>
+        <th id="connexes-label">Lignes connexes</th>
+      </tr>
+      <tr>
+        <td id="desserte">?</td>
+        <td id="frequence">
+          <div class="frequence-container">
+            <div id="frequence-moy-label">1 train toutes les</div><div id="frequence-moy"></div><div id="frequence-moy-label">en moyenne</div>
+            <div class="min-max-container">
+            <div class="min-max">
+              <div id="frequence-min-label">minimum</div>
+              <div id="frequence-min"></div>
+            </div>
+              <div class="min-max">
+                <div id="frequence-max-label">maximum</div><div id="frequence-max"></div>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td id="connexes"></td>
+      </tr>
+      <tr>
+        <th id="didyk-label" colspan="100%">Le saviez vous ?</th>
+      </tr>
+      <tr>
+        <td id="didyk" colspan="100%"></td>
+      </tr>
+      <tr>
+        <th id="nocturne-label">Remplacement nocturne</th>
+        <td id="nocturne" colspan="2"></td>
+      </tr>
+    </tbody>
+    </table>
+    </div>
+  </div>
+  </div>
+  <script src="menucarte.js"></script>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="disclaimer.js"></script>
+  <script src="LignesGeojson.js"></script>
+  <script>
+    let map;
+    let currentMarkers = [];
+    let layerToGroup = new Map();
+
+    const showBtn = document.getElementById("showMap");
+    const closeBtn = document.getElementById("closeMap");
+    const mapContainer = document.getElementById("mapContainer");
+    const headercontent = document.querySelector("header");
+    const maincontent = document.querySelector("main")
+
+    showBtn.addEventListener("click", () => {
+      mapContainer.style.display = "block";
+      headercontent.style.display = "none";
+      maincontent.style.display = "none"
+
+      if (!map) {
+         map = L.map('map', {zoomSnap: 1}).setView([48.8534, 2.3480], 9);
+
+        L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
+          attribution: 'Map tiles by <a href="http://cartodb.com/attributions#basemaps">CartoDB</a>, under <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>'
+        }).addTo(map);
+
+        // === Marqueurs pour la ligne verte ===
+        let currentMarkers = [];
+        let layerToGroup = new Map();
+
+        // === Ligne verte avec interaction ===
+        const Ligne_D_du_Transilien = addLineToMap(LigneD_BOVOZOVO, [48.5716, 2.8843, 10.1], Dstops,
+        'D'
+        );
+
+    const Tramway_T14 = addLineToMap(LigneT14, [48.88066, 2.93838, 12.60], T14stops,
+    'T14')
+
+    const Ligne_P_du_Transilien = addLineToMap(LigneP, [48.80302, 3.60568, 9.40], Pstops,
+    'P')
+
+    const Bus_P = addLineToMap(LigneBusP, [48.80895, 3.38159, 11.78], BPstops,
+    'BusP')
+
+    const Ligne_K_du_Transilien = addLineToMap(LigneK, [49.07604, 3.08154, 10.10], Kstops,
+    'K')
+
+    const Ligne_N_du_Transilien = addLineToMap(LigneN, [48.81537, 2.48356, 9.60] , Nstops,
+    'N')
+
+    const Ligne_J_du_Transilien = addLineToMap(LigneJ, [49.04237, 2.65643, 9.40] , Jstops,
+    'J')
+
+    const Ligne_H_du_Transilien = addLineToMap(LigneH, [49.07185, 2.55637, 10.6] , Hstops,
+    'H')
+
+    const Ligne_V_du_Transilien = addLineToMap(LigneV, [48.76054, 2.29652, 12.30] , Vstops,
+    'V')
+
+    const Ligne_U_du_Transilien = addLineToMap(LigneU, [48.85523, 2.31708, 11.00] , Ustops,
+    'U')
+
+    const Ligne_L_du_Transilien = addLineToMap(LigneL, [48.94030, 2.42467, 11] , Lstops,
+    'L')
+
+    const Ligne_R_du_Transilien = addLineToMap(LigneR, [48.437, 3.175, 9.5] , Rstops,
+    'R')
+
+    map.on('moveend zoomend', function() {
+      const center = map.getCenter();
+      const zoom = map.getZoom();
+      console.log(`${center.lat.toFixed(5)}, ${center.lng.toFixed(5)}, ${zoom.toFixed(2)}`);
+    });
+  } else {
+      setTimeout(() => map.invalidateSize(), 100)
+    } })
+    closeBtn.addEventListener("click", () => {
+    mapContainer.style.display = "none";
+    headercontent.style.display = "block";
+    maincontent.style.display = "block" });
+  </script>
+</body>
+</html>
