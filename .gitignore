@@ -1,8 +1,8 @@
 # files that are too heavy
 assets/
+*.zip
 # except that
 !assets/styles.css
-*.zip
 
 secrets/
 
