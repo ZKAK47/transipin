@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="robots" content="noindex, nofollow">
   <title>Passons au quizz des trains d'Île-de-France</title>
-  <link rel="shortcut icon" type="image/x-icon" href="assets/Transilien RATP.svg">
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/Transilien RATP.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="/assets/styles/styles.css">
   <script src="/assets/scripts/indicesIDF.js"></script>
@@ -343,22 +343,22 @@ label input[type="checkbox"]:checked + .box::before {
     <header>
         <div class="main-header">
             <div class="header-logo">
-                <img src="assets/images/pictos/Train.svg" style="height: inherit; width: 50px;">
+                <img src="/assets/images/pictos/Train.svg" style="height: inherit; width: 50px;">
                 <span>
                     <h2 style="font-size: 1.5em;">Traces des trains</h2>
                     <h2 style="font-size: 0.65em;">d'Ile-de-France</h2>
                 </span>
             </div>
-            <div style="display: flex; justify-content: center; gap: .2em;font-size: 1.5em;position: absolute; top:50%;left:50%;transform:translate(-50%,-50%)"><span class="train-ico">T</span><img class="Logotext Lettre-text" src="assets/images/pictos/R.svg"><img class="Logotext Lettre-text" src="assets/images/pictos/A.svg"><img class="Logotext Lettre-text" src="assets/images/pictos/N.svg"><span class="train-ico">S</span><span class="train-ico">I</span><img class="Logotext Lettre-text" src="assets/images/pictos/P.svg"><span class="train-ico">I</span><img class="Logotext Lettre-text" src="assets/images/pictos/N.svg"></div>
+            <div style="display: flex; justify-content: center; gap: .2em;font-size: 1.5em;position: absolute; top:50%;left:50%;transform:translate(-50%,-50%)"><span class="train-ico">T</span><img class="Logotext Lettre-text" src="/assets/images/pictos/R.svg"><img class="Logotext Lettre-text" src="/assets/images/pictos/A.svg"><img class="Logotext Lettre-text" src="/assets/images/pictos/N.svg"><span class="train-ico">S</span><span class="train-ico">I</span><img class="Logotext Lettre-text" src="/assets/images/pictos/P.svg"><span class="train-ico">I</span><img class="Logotext Lettre-text" src="/assets/images/pictos/N.svg"></div>
             <div style="display: flex; align-items: center;">
             <span>
                 <h2>Oui, </h2>
                 <h2 style="font-size: 0.65em;padding: 2px;">Y'a des trucs après </h2>
             </span>
-            <img style="height: 50px;" src="assets/images/pictos/E.svg"></h2></div>
+            <img style="height: 50px;" src="/assets/images/pictos/E.svg"></h2></div>
         </div>
         <div class="image-container">
-            <img class="slider-image" src="assets/images/photos/Z_50000_Transilien_IDF_Mobilités.jpg">
+            <img class="slider-image" src="/assets/images/photos/Z_50000_Transilien_IDF_Mobilités.jpg">
             <div class="overlay"></div>
                 <ul class="liste-circulaire" style="position: absolute; z-index: 1; color: white; bottom: 1%">
                     <li>
@@ -536,7 +536,7 @@ const audio1 = document.createElement("audio");
 audio1.id = "StarAlliesSelect";
 audio1.preload = true;
 const source1 = document.createElement("source");
-source1.src = "assets/audio/sound effects/Star Allies selected.mp3";
+source1.src = "/assets/audio/sound effects/Star Allies selected.mp3";
 source1.type = "audio/mp3";
 audio1.appendChild(source1);
 
@@ -544,7 +544,7 @@ const audio2 = document.createElement("audio");
 audio2.id = "StarAlliesExit";
 audio2.preload = true;
 const source2 = document.createElement("source");
-source2.src = "assets/audio/sound effects/Star Allies selected 2.mp3";
+source2.src = "/assets/audio/sound effects/Star Allies selected 2.mp3";
 source2.type = "audio/mp3";
 audio2.appendChild(source2);
 
@@ -1032,7 +1032,7 @@ executeAvecDelaiProgressif(() => {
     if (currentWordIndex >= 4) {
         input.style.transition = 'all 0.02s';
         const vidsource = document.createElement('source')
-        vidsource.src = "assets/video/Toncranela.mp4"
+        vidsource.src = "/assets/video/Toncranela.mp4"
         vidsource.type = 'video/mp4'
         video.appendChild(vidsource);
         NoUmove = setInterval(() => {
