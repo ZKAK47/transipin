@@ -88,7 +88,7 @@ function openMenu(line) {
   const spec = lines_spec[lineKey] || {};
 
   // Travel mode
-  const travelModeSrc = `assets/images/pictos/${spec.travelMode}.svg`;
+  const travelModeSrc = `/assets/images/pictos/${spec.travelMode}.svg`;
   setImage('travel-mode', travelModeSrc, spec.travelMode || '');
 
   // Ligne image + plan
@@ -114,7 +114,7 @@ function openMenu(line) {
         span.style.marginLeft = '10px'
         span.textContent = code;
         container.appendChild(span);
-        setImage('planImage', `assets/images/plan/Ligne ${line}.png`, `plan ligne ${line}`);
+        setImage('planImage', `/assets/images/plan/Ligne ${line}.png`, `plan ligne ${line}`);
       });
     };
   }
@@ -126,8 +126,8 @@ function openMenu(line) {
     }
     const container = document.getElementById('ligneImage'); container.classList.remove('hidden')
   const altLigne = spec.travelMode === 'Tram' ? line : `Ligne ${line}`;
-  setImage('ligneImage', `assets/images/pictos/${line}.svg`, altLigne);
-  setImage('planImage', `assets/images/plan/Ligne ${line}.png`, `plan ligne ${line}`);}
+  setImage('ligneImage', `/assets/images/pictos/${line}.svg`, altLigne);
+  setImage('planImage', `/assets/images/plan/Ligne ${line}.png`, `plan ligne ${line}`);}
 
   // Réseau
   if (spec.network) {
@@ -245,7 +245,7 @@ function setRameImage(id, rameKey) {
     rameKey = agcVariants[Math.floor(Math.random() * agcVariants.length)];
   }
 
-  const src = `assets/images/visuels/rames/${rameKey}.png`;
+  const src = `/assets/images/visuels/rames/${rameKey}.png`;
   const alt = rame_alt[rameKey] || rameKey;
   setImage(id, src, alt);
 }

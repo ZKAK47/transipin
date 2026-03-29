@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("picto").forEach(pictoTag => {
         let code = pictoTag.textContent.trim();
         let img = document.createElement("img");
-        img.src = `../assets/images/pictos/${code}.png`;
+        img.src = `/assets/images/pictos/${code}.png`;
         img.alt = code;
         img.classList.add("Logotext");
         pictoTag.replaceWith(img);

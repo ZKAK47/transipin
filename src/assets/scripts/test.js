@@ -153,11 +153,11 @@ const difficulatt = {
   [tquizchamp] : allquiz.expert,
 }
 
-const tada = new Audio('assets/audio/sound effects/Tada.mp3')
+const tada = new Audio('/assets/audio/sound effects/Tada.mp3')
 
-const bruh = new Audio('assets/audio/sound effects/XP Windows error.mp3')
+const bruh = new Audio('/assets/audio/sound effects/XP Windows error.mp3')
 
-const HUH = new Audio('assets/audio/sound effects/suspense HUH.mp3')
+const HUH = new Audio('/assets/audio/sound effects/suspense HUH.mp3')
 
 let quizcheat = false
 

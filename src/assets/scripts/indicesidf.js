@@ -44,20 +44,20 @@ function replaceIndice(node) {
             const style = pictobus[code];
         
             if (style) {
-                return `<span class="mode-picto"><img src="assets/images/pictos/Bus.svg" class="Logotext"> <span class="indice-bus" style="background-color: ${style['bg-col']}; color: ${style['text-col']};"><p>${code}</p></span></span>`;
+                return `<span class="mode-picto"><img src="/assets/images/pictos/Bus.svg" class="Logotext"> <span class="indice-bus" style="background-color: ${style['bg-col']}; color: ${style['text-col']};"><p>${code}</p></span></span>`;
             } else {
-                return `<span class="mode-picto"><img src="assets/images/pictos/Bus.svg" class="Logotext"> <span class="indice-bus">${code}</span></span>`;
+                return `<span class="mode-picto"><img src="/assets/images/pictos/Bus.svg" class="Logotext"> <span class="indice-bus">${code}</span></span>`;
             }
         });
 
         text = text.replace(/\bN(\d{1,3})\b/g, (_, line) => {
             replaced = true;
-            return `<img src="assets/images/pictos/N${line}.svg" class="Logotext">`
+            return `<img src="/assets/images/pictos/N${line}.svg" class="Logotext">`
         });
 
         text = text.replace(/\bfiléo\b/g, (_) => {
             replaced = true;
-            return `<img src="assets/images/pictos/filéo.svg" class="Logotext">`
+            return `<img src="/assets/images/pictos/filéo.svg" class="Logotext">`
         });
 
         // RER/Transilien
@@ -70,16 +70,16 @@ function replaceIndice(node) {
 
             if (validLines.includes(line)) {
 
-            return `<span class="mode-picto"><img src="assets/images/pictos/${Tlogo}.svg" class="Logotext" alt="${mode}">` + ' ' + `<img src="assets/images/pictos/${line}.svg" class="Logotext"  alt="${line}"></span>`;}
+            return `<span class="mode-picto"><img src="/assets/images/pictos/${Tlogo}.svg" class="Logotext" alt="${mode}">` + ' ' + `<img src="/assets/images/pictos/${line}.svg" class="Logotext"  alt="${line}"></span>`;}
 
             else {
-                return `<span class="mode-picto"><img src="assets/images/pictos/${Tlogo}.svg" class="Logotext" alt="${mode}">` + ' ' + `<span class="train-ico"><p>${line}</p></span></span>`;}
+                return `<span class="mode-picto"><img src="/assets/images/pictos/${Tlogo}.svg" class="Logotext" alt="${mode}">` + ' ' + `<span class="train-ico"><p>${line}</p></span></span>`;}
             });
 
         // Tram TXX
         text = text.replace(/\bTram T(\d{1,2})\b/g, (_, line) => {
             replaced = true;
-            return `<span class="mode-picto"><img src="assets/images/pictos/Tram.svg" class="Logotext">` + ' ' + `<img src="assets/images/pictos/T${line}.svg" class="Logotext"></span>`
+            return `<span class="mode-picto"><img src="/assets/images/pictos/Tram.svg" class="Logotext">` + ' ' + `<img src="/assets/images/pictos/T${line}.svg" class="Logotext"></span>`
         });
 
         // TER
@@ -89,7 +89,7 @@ function replaceIndice(node) {
             if (line) {
                 return `
             <span style="white-space: nowrap">
-                <img src="assets/images/pictos/TER.svg" class="Logotext">
+                <img src="/assets/images/pictos/TER.svg" class="Logotext">
                 <span class="restrain-ico" style="background-color: ${IDFVertFonce}; color: white;">
                     ${line}
                 </span>
@@ -98,13 +98,13 @@ function replaceIndice(node) {
             }
 
             else {
-            return `<img src="assets/images/pictos/TER.svg" class="Logotext">`
+            return `<img src="/assets/images/pictos/TER.svg" class="Logotext">`
         }
         });
 
         text = text.replace(/\bRémi\b/g, (match) => {
             replaced = true;
-                return `<img src="assets/images/pictos/${match}.svg" class="Logotext">`
+                return `<img src="/assets/images/pictos/${match}.svg" class="Logotext">`
         });
 
         if (replaced) {
